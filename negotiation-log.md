@@ -69,6 +69,18 @@
 
 ---
 
+## Issue #6 — Cấu trúc dữ liệu và kích thước payload (Event Size)
+
+- Raised by: Consumer (Analytics)
+- Event: `alert.created`, `alert.resolved`
+- Concern: Analytics lo ngại việc Core Business có thể gửi payload quá lớn, chứa cả hình ảnh (Base64) hoặc nội dung dài thừa thãi gây chậm trễ queue và tốn lưu trữ.
+- Proposal: Core Business cam kết kích thước mỗi sự kiện không quá 64KB, tuyệt đối không gửi binary/image data trong payload. Nếu có ảnh, chỉ truyền URL (link).
+- Resolution: Accepted
+- Rationale: Queue không thiết kế để truyền tải object lớn. Việc giới hạn payload giúp hệ thống async chạy mượt mà, Analytics parse JSON tốc độ cao.
+- Impact: Core Business kiểm tra loại bỏ các field binary nếu có, Analytics tự tin setup buffer và resource processing nhỏ gọn.
+
+---
+
 # Chốt hợp đồng sơ bộ v1.0
 
 Producer sign-off: Nhóm 12 — Core Business (B6)
